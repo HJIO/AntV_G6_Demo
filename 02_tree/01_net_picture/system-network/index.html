@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统网络</title>
+    <script>
+        document.body.clientHeight;
+    </script>
+    <style>
+        ::-webkit-scrollbar{
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <style>
+        .node-tool {
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            padding: 6px;
+            font-size: 14px;
+            color: #666;
+            list-style-type: none;
+            background: #fff;
+            -webkit-box-shadow: 0 2px 5px #ccc;
+            -moz-box-shadow: 0 2px 5px #ccc;
+            box-shadow: 0 2px 5px #ccc;
+        }
+
+        .node-tool li {
+            padding: 4px 2px;
+        }
+
+        .node-tool li:hover {
+            color: #26a8fb;
+            cursor: pointer;
+        }
+
+        #mountNode {
+            padding-right: 130px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mountNode"></div>
+    <script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/assets/g6-plugins/1.0.1/g6-plugins.min.js"></script>
+    <script>
+        $.getJSON( './system.json', data => {
+            const Mapper = G6.Plugins['enhance.d3.mapper'];
+            const template = new G6.Plugins['template.analysis.maxSpanningForest']();
+            const  nodeSizeMapper = new Mapper( 'node', 'weight', 'size', [3.5, 90], {
+                legendCfg: {
+                    callback: legend => {
+                        legend.title('流量大小');
+                    },
+                    fill: '#919191',
+                    marginRight: -150,
+                    marginBottom: 6,
+                }
+            });
+
+            const colors = ['#3dbd7d', '#76d0a3', '#f78e3d', '#f56a00'];
+            const nodeColorMapper = new Mapper( 'node', 'health', 'color', colors, {
+                legendCfg: {
+                    callback: legend => {
+                        legend.title( '系统健康度');
+                    },
+                    marginRight: -106,
+                    marginBottom: 190,
+                }
+            });
+
+            const edgeSizeMapper = new Mapper( 'edge', 'weight', 'size', [3.5, 10], {
+                scaleCfg: {
+                    type: 'log',
+                },
+                legendCfg: null,
+            });
+
+            const miniMapper = new Mapper();
+            const net = new G6.Net({
+                id: 'mountNode',
+                height: window.innerHeight,
+                plugins: [template, nodeSizeMapper, edgeSizeMapper, nodeColorMapper],
+            });
+            net.node().label('id');
+            net.edge().style({
+                stroke: '#bfbfbf',
+                strokeOpacity: 0.5,
+            });
+            net.source( data);
+            net.render();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生态树</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    $.getJSON( './tiny-tree.json', data => {
+        const Util = G6.Util;
+        const layoutCfg = {
+            'direction': 'LR',
+            'nodeSize': 20,
+            'rankSep': 400,
+        };
+
+        const DEFAULT_NODE_SIZE = layoutCfg.nodeSize;
+    });
+</script>
+</body>
+</html>

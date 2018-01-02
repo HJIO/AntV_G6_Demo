@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>紧凑树</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    $.getJSON( './tiny-tree.json', data => {
+        const tree = new G6.Tree({
+            id: 'mountNode',
+            height: window.innerHeight,
+            fitView: 'autoZoom',
+            layoutCfg: {
+                getHGap: function () {
+                    return 100;
+                },
+                getVGap: function () {
+                    return 10;
+                },
+            },
+        });
+
+        tree.source( data);
+        tree.node().label( function (obj) {
+            return obj.name;
+        }).style( {
+            fillOpacity: 1
+        });
+        tree.edge().shape( 'smooth');
+        tree.render();
+    });
+</script>
+</body>
+</html>

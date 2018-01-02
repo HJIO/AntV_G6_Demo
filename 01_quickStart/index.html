@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Start</title>
+    <!--Import G6-->
+    <script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+</head>
+<body>
+    <!--Dom Container-->
+    <div id="quick"></div>
+    <script>
+        // set data
+        const data = {
+            "nodes": [
+                {
+                    "x": 160,
+                    "y": 160,
+                    "id": "node01",
+                }, {
+                    "x": 360,
+                    "y": 160,
+                    "id": "node02",
+                }
+            ],
+            "edges": [
+                {
+                    "source": "node01",
+                    "id": "edge01",
+                    "target": "node02"
+                }
+            ],
+        };
+
+        // configure g6 canvas
+        const net = new G6.Net({
+            id: "quick",
+            width: 660,
+            height: 660
+        });
+
+        // loading data
+        net.source( data.nodes, data.edges);
+
+        // render the page
+        net.render();
+
+        // close track
+        G6.track( false);
+    </script>
+</body>
+</html>
