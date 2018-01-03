@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>行为与模式</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    // set button
+    $('#mountNode').append( '<div id="toolBar" style="position: absolute; z-index: 10;"></div>');
+    $('#mountNode').prepend( '<button id="addClickActive">添加点击激活行为</button>');
+    $('#mountNode').prepend( '<button id="removeClickActive">删除点击激活行为</button>');
+    $('#mountNode').prepend( '<button id="changeModeToDefault">切换到默认模式</button>');
+    $('#mountNode').prepend( '<button id="changeModeEdit">切换到编辑模式</button>');
+
+    // set data
+    const data = {
+        nodes: [
+            {
+                'x': 120,
+                'y': 210,
+                'id': 'node1',
+            }, {
+                'x': 270,
+                'y': 210,
+                'id': 'node2',
+            }
+        ],
+        edges: [
+            {
+                'source': 'node1',
+                'id': 'edge1',
+                'target': 'node2',
+            }
+        ],
+    };
+
+    // generate an instance
+    const net = new G6.Net({
+        id: 'mountNode',
+        modes: {
+            // default
+            default: [
+                'dragNode', 'dragEdge', 'dragBlank', 'clickBlankClearActive', 'resizeEdge', 'clickActive', 'resizeNode', 'wheelZoom'
+            ],
+            // edit
+            edit: [
+                'dragNode', 'dragEdge', 'clickBlankClearActive', 'resizeEdge', 'clickActive',
+                'multiSelect', 'resizeNode', 'shortcut', 'wheelZoom'
+            ],
+        },
+        mode: 'default',
+        height: window.innerHeight,
+    });
+    net.source( data.nodes, data.edges);
+    net.render();
+
+    const addClickActive = $('#addClickActive');
+    const removeClickActive = $('#removeClickActive');
+    const changeModeToDefault = $('#changeModeToDefault');
+    const changeModeToEdit = $('#changeModeEdit');
+
+    addClickActive.on( 'click', () => {
+        net.addBehaviour(['clickActive']);
+    });
+    removeClickActive.on( 'click', () => {
+        net.removeBehaviour(['clickActive']);
+    });
+    changeModeToDefault.on( 'click', () => {
+        net.changeMode('default');
+    });
+    changeModeToEdit.on( 'click', () => {
+        net.changeMode('edit');
+    });
+</script>
+</body>
+</html>

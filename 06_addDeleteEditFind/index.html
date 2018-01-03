@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>增删改查</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    $('#mountNode').append( '<div id="toolBar" style="position: absolute; z-index: 10;"></div>');
+    $('#mountNode').append( '<button id="addCircle">新增圆</button>');
+    $('#mountNode').append( '<button id="addRect">新增矩形</button>');
+    $('#mountNode').append( '<button id="delete">删除</button>');
+    $('#mountNode').append( '<button id="findUpdate">查找并更新</button>');
+
+    let i = 1;
+    const btnAddCircle = $('#addCircle');
+    const btnAddRect = $('#addRect');
+    const btnDelete = $('#delete');
+    const btnFindUpdate = $('#findUpdate');
+    const data = {
+        nodes: [],
+        edges: [],
+    };
+    const net = new G6.Net({
+        id: 'mountNode',
+        height: window.innerHeight,
+    });
+    net.source( data.nodes, data.edges);
+    net.render();
+
+    btnAddCircle.on( 'click', () => {
+        net.add( 'node', {
+            shape: 'circle',
+            id: 'id' + i++,
+            x: 50 + i * 10,
+            y: 50 + i * 10,
+        });
+        net.refresh();
+    });
+    btnAddRect.on( 'click', () => {
+        net.add( 'node', {
+            shape: 'rect',
+            id: 'id' + i++,
+            x: 50 + i * 10,
+            y: 50 + i * 10,
+        });
+        net.refresh();
+    });
+    btnDelete.on( 'click', () => {
+        if( i > 1) {
+            i = i - 1;
+            const item = net.find( 'id' + i);
+            net.remove( item);
+            net.refresh();
+        }
+    });
+    btnFindUpdate.on( 'click', () => {
+        if( i > 1) {
+            i = i - 1;
+            const item = net.find( 'id' + i);
+            net.update( item, {
+                color: 'red',
+            });
+            net.refresh();
+        }
+    });
+</script>
+</body>
+</html>

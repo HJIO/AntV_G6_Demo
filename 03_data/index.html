@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Read && Save Data</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    const data = {
+        source: {
+            'nodes': [
+                {
+                    'x': 140,
+                    'y': 210,
+                    'id': 'node1',
+                }, {
+                    'x': 270,
+                    'y': 210,
+                    'id': 'node2',
+                }
+            ],
+            'edges': [
+                {
+                    'source': 'node1',
+                    'id': 'edge1',
+                    'target': 'node2'
+                }
+            ]
+        },
+    };
+    // generate an instance
+    const net1 = new G6.Net({
+        id: 'mountNode',
+        fitView: 'autoSize',
+    });
+    // read data
+    net1.read( data);
+    // reader
+    net1.render();
+    $("#mountNode").append( '<div><strong>Graph 01</strong></div>');
+
+    // generate an instance
+    const net2 = new G6.Net({
+        id: 'mountNode',
+        height: 100,
+        fitView: 'autoSize'
+    });
+    $('#mountNode').append( '<div><strong>Graph 02</strong></div>');
+    // set Save Button: loading data to Graph 02
+    $('#mountNode').prepend( '<button id="saveAndread">将第一幅图的数据保存并读入第二幅图</button>');
+
+    const saveAndread = $('#saveAndread');
+    saveAndread.on( 'click', () => {
+        const saveData = net1.save();
+        net2.read( saveData);
+        net2.render();
+    });
+</script>
+</body>
+</html>

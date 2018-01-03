@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>锚点</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    G6.registerNode( 'custom1', {
+        // 常规锚点
+        getAnchorPoints() {
+            return [
+                [0, 0.5], // 左边中点， 索引为 0
+                [1, 0.5], // 右边中点， 索引为 1
+            ];
+        }
+    });
+
+    G6.registerNode( 'custom2', {
+        // 自动锚点
+        getAnchorPoints() {
+            return 'auto';
+        }
+    });
+
+    G6.registerNode( 'custom3', {
+        // 不使用锚点
+        getAnchorPoints() {
+            return null;
+        }
+    });
+
+    const data = {
+        nodes: [
+            {
+                x: 240,
+                y: 210,
+                id: 'node1',
+                shape: 'custom1',
+            }, {
+                x: 370,
+                y: 170,
+                id: 'node2',
+                shape: 'custom2',
+            }, {
+                x: 370,
+                y: 270,
+                id: 'node3',
+                shape: 'custom3',
+            },
+        ],
+        edges: [
+            {
+                source: 'node1',
+                id: 'edge1',
+                target: 'node2',
+            }, {
+                source: 'node1',
+                id: 'edge2',
+                target: 'node3',
+            },
+        ],
+    };
+
+    const net = new G6.Net({
+        id: 'mountNode',
+        fitView: 'cc',
+        height: window.innerHeight,
+        mode: 'edit',
+    });
+    net.source( data.nodes, data.edges);
+    net.render();
+</script>
+</body>
+</html>

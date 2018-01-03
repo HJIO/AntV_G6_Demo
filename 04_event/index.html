@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    // set data
+    const data = {
+        nodes: [
+            {
+                'id': 'node1',
+                'x': 100,
+                'y': 160
+            }, {
+                'id': 'node2',
+                'x': 290,
+                'y': 160,
+            }
+        ],
+        edges: [
+            {
+                'id': 'node1-node2',
+                'target': 'node1',
+                'source': 'node2',
+            }
+        ],
+    };
+    // generate an instance
+    const net = new G6.Net( {
+        id: 'mountNode',
+        height: window.innerHeight,
+    });
+    // set source
+    net.source( data.nodes, data.edges);
+    // render
+    net.render();
+    // event
+    net.on( 'itemclick', ev => {
+        alert( '击中' + ev.item.get('model').id + '!');
+    });
+    net.on( 'itemmousedown', ev => {
+        const item = ev.item;
+        if( net.isNode( item)) {
+            net.update( item, {
+                shape: 'circle'
+            });
+            net.refresh();
+        }
+    });
+    net.on( 'itemmouseup', ev => {
+        const item = ev.item;
+        if( net.isNode( item)) {
+            net.update( item, {
+                shape: 'rect'
+            })
+            net.refresh();
+        }
+    });
+    net.on( 'itemmouseenter', ev => {
+        const itme = ev.item;
+        net.update( item, {
+            color: 'red'
+        })
+        net.return();
+    });
+    net.on( 'itemmouseleave', ev => {
+        const item = ev.item;
+        net.update( item, {
+            color: null
+        });
+        net.return();
+    });
+</script>
+</body>
+</html>
