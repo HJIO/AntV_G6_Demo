@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义箭头</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+    const Util = G6.Util;
+    G6.registerEdge( 'bezierQuadratic', {
+        afterDraw( cfg, group, keyShape) {
+            const points = cfg.points;
+            const end = points[ points.length - 1];
+            const center = keyShape.getPoint( 0.5);
+            let lineWidth = keyShape.attr( 'lineWidth');
+            if( lineWidth < 5) {
+                lineWidth = 5;
+            }
+
+            const arrow = group.addShape( 'polyline', {
+                attrs: {
+                    points: [
+                        [ -lineWidth / 4, lineWidth / 2],
+                        [lineWidth / 4, 0],
+                        [-lineWidth / 4, -lineWidth / 2],
+                    ],
+                    stroke: '#333',
+                },
+                class: 'arrow'
+            });
+            Util.arrowTo( arrow, center.x, center.y, center.x, center.y, end.x, end.y);
+        },
+    });
+
+    const data = {
+        "source": {
+          "nodes": [
+            {
+              "shape": "rect",
+              "label": "文本",
+              "x": 550,
+              "y": 260,
+              "id": "af11b7bc"
+            },
+            {
+              "shape": "rect",
+              "label": "文本",
+              "x": 780,
+              "y": 260,
+              "id": "313ed868"
+            }
+          ],
+          "edges": [
+            {
+              "source": "af11b7bc",
+              "target": "313ed868",
+              "id": "bd2bc602"
+            },
+            {
+              "source": "313ed868",
+              "target": "af11b7bc",
+              "id": "1be6dc9f",
+              "size": 2,
+              "targetAnchor": 2,
+              "sourceAnchor": 2 
+            },
+            {
+              "source": "af11b7bc",
+              "target": "313ed868",
+              "id": "3d463cd1",
+              "targetAnchor": 0,
+              "sourceAnchor": 0
+            },
+            {
+              "source": "313ed868",
+              "target": "af11b7bc",
+              "id": "ba7e057c",
+              "size": 6
+            }
+          ]
+        }
+      };
+      const net = new G6.Net({
+          id: 'mountNode',
+          height: window.innerHeight,
+          fitView: 'cc',
+          mode: 'none',
+          grid: {
+              forceAlign: true,
+              cell: 10
+          }
+      });
+      net.read( data);
+      net.edge().shape( 'bezierQuadratic');
+      net.render();
+</script>
+</body>
+</html>

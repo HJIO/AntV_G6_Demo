@@ -31,9 +31,10 @@
 <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
 <script src="https://gw.alipayobjects.com/os/antv/assets/g2/3.0.4-beta.2/g2.min.js"></script>
 <script src="https://gw.alipayobjects.com/os/antv/assets/data-set/0.8.3/data-set.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
     $.getJSON( './iris.json', irisData => {
-        const Util = G6.Util();
+        const Util = G6.Util;
         const colorMap = {
             all: '#333',
             setosa: '#64a051',
@@ -267,10 +268,21 @@
             },
         }, 'line');
 
-        et.node().size([50, 50]).style({
+        net.node().size([50, 50]).style({
             stroke: null,
             fill: null,
         }).shape( 'customNode');
+        net.edge().size(2).shape( 'customEdge');
+        net.removeBehaviour(['wheelZoom']);
+        net.source( data.nodes, data.edges);
+        net.render();
+
+        // drawing graph
+        const containerDom = $('#mountNode');
+        containerDom.css( 'background', colorMap.bac);
+        containerDom.css( 'height', height + 'px');
+        containerDom.css( 'position', 'relative');
+        containerDom.append( '<ul id="legend"><li style="color: ' + colorMap.all + '">All</li><li style="color: ' + colorMap.setosa + '">Setosa</li><li style="color:' + colorMap.versicolor + '">Versicolor</li><li style="color: ' + colorMap.virginica + '">Virginica</li></ul>');
     });
 </script>
 </body>

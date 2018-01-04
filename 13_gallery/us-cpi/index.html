@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>US CPI</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            overflow: hidden;
+        }
+        #mountNode {
+            padding-right: 130px;
+        }
+    </style>
+    <script>
+        document.body.clientHeight;
+    </script>
+</head>
+<body>
+<div id="mountNode"></div>
+
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6/1.2.1/g6.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/g6-plugins/1.0.1/g6-plugins.min.js"></script>
+<script src="https://cdn.bootcss.com/d3/4.11.0/d3.min.js"></script>
+<script>
+    $.getJSON( './us-cpi.json', data => {
+        const Mapper = G6.Plugins['enhance.d3.mapper'];
+        const nodeSizeMapper = new Mapper( 'node', 'weight', 'size', [3.5, 60], {
+            legendCfg: {
+                marginRight: -120,
+                callback: function (legend) {
+                    legend.title( '所占权重');
+                    legend.labelFormat( d3.format( '.0%'));
+                },
+            },
+        });
+        const mappingColors = ['#007AE7', '#40BCD2', '#81D6C3', '#c1E4BC', '#FFDD9B', '#FEAC4C', '#FF7C01', '#C4201D'];
+        const nodeColorMapper = new Mapper( 'node', 'percentChange', 'color', mappingColors, {
+            legendCfg: {
+                marginBottom: 180,
+                marginRight: -104,
+                callback: legend => {
+                    legend.title('CPI');
+                    legend.labelFormat( d3.format('.0%'));
+                },
+            },
+        });
+        const layout = new G6.Plugins['layout.d3.force']({
+            dynamic: true,
+        });
+
+        const net = new G6.Net({
+            id: 'mountNode',
+            height: window.innerHeight,
+            mode: 'analysis',
+            plugins: [nodeSizeMapper, nodeColorMapper, layout],
+        });
+        net.source( data);
+        net.node().label('id').shape('circle').style({
+            stroke: '#666',
+            strokeOpacity: 0.5,
+            lineWidth: 1,
+            fillOpacity: 1,
+        });
+        net.render();
+    });
+</script>
+</body>
+</html>
